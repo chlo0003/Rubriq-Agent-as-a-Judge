@@ -4,6 +4,8 @@ Agentic rubric assistant built with Google ADK.
 
 Rubriq is a small agentic system that helps humans apply rubrics to project work. It assists both reviewers and learners.
 
+Code was submitted as part of Kaggle Capstone/Competition and was intended to be run inside Kaggle environment.
+
 Architecture
 ------------
 - AnalysisAgent (LLM):   infers criteria from free-form rubric + project + code, and summarises the project.
