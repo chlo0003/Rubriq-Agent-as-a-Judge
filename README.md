@@ -1,13 +1,22 @@
 # Rubriq-Agent-as-a-Judge
-Rubriq is a small agentic system that helps humans apply rubrics to project work. It assists both reviewers and learners.
-Usage:
-1. Paste rubric text that follows the simple pattern: category lines with totals, bullet lines with 'max N'.
-2. Paste project writeup, optional readme, and short code snippets.
-3. Call orchestrator.run_review(...).
-4. Inspect scores, reasons, and learner feedback.
 
-Design:
-- AnalysisAgent: project summary, claims, rubric parsing, evidence mapping.
-- ScoringAgent: per-item scores and overall comment.
-- FeedbackAgent: strengths, improvements, self review questions.
-- SimpleMemory: keeps recent reviews as a light long term store.
+Agentic rubric assistant built with Google ADK.
+
+Rubriq is a small agentic system that helps humans apply rubrics to project work. It assists both reviewers and learners.
+
+Architecture
+------------
+- AnalysisAgent (LLM):   infers criteria from free-form rubric + project + code, and summarises the project.
+- ScoringAgent  (LLM):   scores each inferred criterion with reasons.
+- FeedbackAgent (LLM):   turns summary + scores into a final JSON result.
+- PipelineAgent (SequentialAgent): runs Analysis -> Scoring -> Feedback in strict order.
+- Orchestrator  (LLM):   uses PipelineAgent as a tool; exposes a single entrypoint.
+
+Inputs (all free-text strings):
+    rubric_text      : free-form rubric or guidelines
+    project_writeup  : free-form project writeup
+    code_text        : Python code (string)
+
+Basic memory:
+- InMemorySessionService is used.
+- Orchestrator + pipeline + sub-agents all share (user_id, session_id) context via ADK.
